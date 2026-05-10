@@ -2,22 +2,27 @@ name: Update News Page
 
 on:
   schedule:
-    - cron: '0 */12 * * *'   # 12時間ごとに実行（0時と12時）
+    - cron: '0 */12 * * *'   # 12時間ごとに実行
   workflow_dispatch:          # 手動実行も可能
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 feedparser
+
       - name: Run script
-        run: python google-news.py   # 用意済みのpyコードを実行
+        run: python google-news.py
 
       - name: Commit changes
         run: |
