@@ -1,0 +1,28 @@
+name: Update News Page
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'   # 12時間ごとに実行（0時と12時）
+  workflow_dispatch:          # 手動実行も可能
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run script
+        run: python google-news.py   # 用意済みのpyコードを実行
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'actions@github.com'
+          git add docs/index.html
+          git commit -m "Update news page"
+          git push
